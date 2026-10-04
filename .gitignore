@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# scratch: reference crops, measurement scripts and verification screenshots
+# generated while building the page. Safe to delete.
+/.ref
+
 # debug
 npm-debug.log*
 yarn-debug.log*

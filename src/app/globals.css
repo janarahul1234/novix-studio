@@ -1,26 +1,188 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------
+   Novix Studio - design tokens
+   Palette is locked to the reference: light paper, inset black cards,
+   one scarlet accent, gray "smoke" type for the muted half of headlines.
+------------------------------------------------------------------- */
+@theme {
+  --font-sans: var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+
+  --color-paper: #f6f6f6;
+  --color-card: #ffffff;
+  --color-ink: #0c0c0c;
+  --color-smoke: #9b9b9b;
+  --color-mute: #6f6f6f;
+  --color-line: #e6e6e3;
+
+  --color-coal: #000000;
+  --color-slab: #161616;
+  --color-slabline: #262626;
+  --color-ash: #8f8f8f;
+
+  --color-accent: #ff2a12;
+  --color-gold: #f0a93b;
+
+  --radius-sheet: 2rem;
+  --radius-panel: 1.5rem;
+  --radius-tile: 1.125rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  letter-spacing: -0.011em;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* -------------------------------------------------- page shell ---- */
+.shell {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .shell {
+    padding-inline: 4.5rem;
+  }
+}
+
+/* Bordered light section frame with plus marks on the corners. */
+.frame {
+  position: relative;
+  border: 1px solid var(--color-line);
+  margin-inline: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .frame {
+    margin-inline: 2rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .frame {
+    margin-inline: 3.5rem;
+  }
+}
+
+.frame::before,
+.frame::after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background:
+    linear-gradient(var(--color-line), var(--color-line)) center / 11px 1px
+      no-repeat,
+    linear-gradient(var(--color-line), var(--color-line)) center / 1px 11px
+      no-repeat;
+}
+
+.frame::before {
+  top: -6px;
+  left: -6px;
+}
+
+.frame::after {
+  bottom: -6px;
+  right: -6px;
+}
+
+/* ------------------------------------------------- chamfered ------ */
+/* The reference cuts one corner off several cards instead of rounding
+   it. Clip-path keeps the photo inside the cut. */
+.chamfer-tr {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 1.75rem) 0,
+    100% 1.75rem,
+    100% 100%,
+    0 100%
+  );
+}
+
+.chamfer-br {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 1.75rem),
+    calc(100% - 1.75rem) 100%,
+    0 100%
+  );
+}
+
+.chamfer-both {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 2rem) 0,
+    100% 2rem,
+    100% 100%,
+    2rem 100%,
+    0 calc(100% - 2rem)
+  );
+}
+
+/* --------------------------------------------------- utilities ---- */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 34s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Grain over the hero so the black card does not read as flat CSS. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
 }
